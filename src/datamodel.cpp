@@ -10,7 +10,7 @@
 void DataModel::loadFoodFromFile(QString fileName) {
 	QFile file(fileName);
 
-	if (!file.open()(QIODevice::ReadOnly | QIODevice::Text)) {
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		return;
 	}
 	qDebug() << "ahoj";
