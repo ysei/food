@@ -6,16 +6,18 @@
 
 enum INFO {
 	infoFirst = 0,
-	name = 0,
-	type = 1,
-	ingredients = 2,
-	preparation = 3,
+	NAME = 0,
+	TYPE = 1,
+	INGREDIENTS = 2,
+	PREPARATION = 3,
 	infoLast = 3
 };
 
 class DataModel {
 public:
-	void loadFoodFromFile(QString fileName);
+	bool loadFoodFromFile(QString fileName);
+	int getFoodAmount();
+	QString getFoodNameAtPos (int pos);
 
 private:
 	QStringList food[4];

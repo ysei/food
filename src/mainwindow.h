@@ -16,6 +16,7 @@ public:
 private:
 	QListWidget *foodList;
 	DataModel *foodInfo;
+	void CreateLayout();
 	
 };
 
