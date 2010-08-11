@@ -58,3 +58,15 @@ int DataModel::getFoodAmount() {
 QString DataModel::getFoodNameAtPos (int pos) {
 	return food[NAME][pos];
 }
+
+QString DataModel::getFoodTypeAtPos (int pos) {
+	return food[TYPE][pos];
+}
+
+QString DataModel::getFoodIngredientsAtPos (int pos) {
+	return food[INGREDIENTS][pos];
+}
+
+QString DataModel::getFoodPreparationAtPos (int pos) {
+	return food[PREPARATION][pos];
+}
