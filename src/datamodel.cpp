@@ -7,7 +7,9 @@
 #include "datamodel.h"
 
 
-//FIXME TODO vytvorit xml soubor s daty, napsat jeho nacitani
+/*
+ * nacte data z xml souboru
+ */
 bool DataModel::loadFoodFromFile(QString fileName) {
 	QFile file(fileName);
 
@@ -51,22 +53,44 @@ bool DataModel::loadFoodFromFile(QString fileName) {
 	return true;
 }
 
+/*
+ * vrati pocet nactenych jidel
+ */
 int DataModel::getFoodAmount() {
 	return food[NAME].size();
 }
 
-QString DataModel::getFoodNameAtPos (int pos) {
-	return food[NAME][pos];
+/*
+ * zjisti nazev jidla na pozici index
+ */
+QString DataModel::getFoodNameAtIndex (int index) {
+	return food[NAME][index];
 }
 
-QString DataModel::getFoodTypeAtPos (int pos) {
-	return food[TYPE][pos];
+/*
+ * zjisti typ jidla na pozici index
+ */
+QString DataModel::getFoodTypeAtIndex (int index) {
+	return food[TYPE][index];
 }
 
-QString DataModel::getFoodIngredientsAtPos (int pos) {
-	return food[INGREDIENTS][pos];
+/*
+ * zjisti slozeni jidla pozici index
+ */
+QString DataModel::getFoodIngredientsAtIndex (int index) {
+	return food[INGREDIENTS][index];
 }
 
-QString DataModel::getFoodPreparationAtPos (int pos) {
-	return food[PREPARATION][pos];
+/*
+ * zjisti pripravu jidla na pozici index
+ */ 
+QString DataModel::getFoodPreparationAtIndex (int index) {
+	return food[PREPARATION][index];
+}
+
+/*
+ * vrati index jidla s nazvem name
+ */
+int DataModel::indexOf (QString name) {
+	return food[NAME].indexOf(name);
 }

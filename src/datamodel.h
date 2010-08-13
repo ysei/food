@@ -17,10 +17,11 @@ class DataModel {
 public:
 	bool loadFoodFromFile(QString fileName);
 	int getFoodAmount();
-	QString getFoodNameAtPos (int pos);
-	QString getFoodTypeAtPos (int pos);
-	QString getFoodIngredientsAtPos (int pos);
-	QString getFoodPreparationAtPos (int pos);
+	QString getFoodNameAtIndex (int pos);
+	QString getFoodTypeAtIndex (int pos);
+	QString getFoodIngredientsAtIndex (int pos);
+	QString getFoodPreparationAtIndex (int pos);
+	int indexOf (QString name);
 
 private:
 	QStringList food[4];

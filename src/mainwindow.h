@@ -31,7 +31,6 @@ private:
 	QTextEdit *foodDetail;
 	QMenuBar *menuBar;
 	QMenu *fileMenu;
-	QAction *quitAction;
 	QHBoxLayout *boxLayout;
 	QGroupBox *horizontalGroupBox;
 	DataModel *foodInfo;
@@ -39,10 +38,13 @@ private:
 
 	void CreateActions();
 	void CreateLayout();
+	void DisplayInfoAtIndex(int index);
 	
+	QAction *quitAction;
 
 private slots:
 	void quit(void);
+	void ItemSelected(QListWidgetItem *item);
 	
 };
 
