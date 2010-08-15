@@ -1,8 +1,4 @@
 
-#include <QDebug>
-#include <QXmlStreamReader>
-#include <QFile>
-#include <QString>
 
 #include "datamodel.h"
 
@@ -10,7 +6,7 @@
 /*
  * nacte data z xml souboru
  */
-bool DataModel::loadFoodFromFile(QString fileName) {
+bool DataModel::LoadFoodFromFile(QString fileName) {
 	QFile file(fileName);
 
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -56,41 +52,41 @@ bool DataModel::loadFoodFromFile(QString fileName) {
 /*
  * vrati pocet nactenych jidel
  */
-int DataModel::getFoodAmount() {
+int DataModel::GetFoodAmount() {
 	return food[NAME].size();
 }
 
 /*
  * zjisti nazev jidla na pozici index
  */
-QString DataModel::getFoodNameAtIndex (int index) {
+QString DataModel::GetFoodNameAtIndex (int index) {
 	return food[NAME][index];
 }
 
 /*
  * zjisti typ jidla na pozici index
  */
-QString DataModel::getFoodTypeAtIndex (int index) {
+QString DataModel::GetFoodTypeAtIndex (int index) {
 	return food[TYPE][index];
 }
 
 /*
  * zjisti slozeni jidla pozici index
  */
-QString DataModel::getFoodIngredientsAtIndex (int index) {
+QString DataModel::GetFoodIngredientsAtIndex (int index) {
 	return food[INGREDIENTS][index];
 }
 
 /*
  * zjisti pripravu jidla na pozici index
  */ 
-QString DataModel::getFoodPreparationAtIndex (int index) {
+QString DataModel::GetFoodPreparationAtIndex (int index) {
 	return food[PREPARATION][index];
 }
 
 /*
  * vrati index jidla s nazvem name
  */
-int DataModel::indexOf (QString name) {
+int DataModel::IndexOf (QString name) {
 	return food[NAME].indexOf(name);
 }

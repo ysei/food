@@ -2,7 +2,6 @@
 #include <QDebug>
 
 #include "mainwindow.h"
-#include "datamodel.h"
 
 /*
  * Konstruktor hlavniho okna
@@ -12,22 +11,25 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	CreateActions();
 	//vytvoreni widgetu pro zobrazovani informaci, nabidky File a listy s tlacitkama
 	CreateLayout();
+	config.LoadConfiguration();
 
-	//nazev souboru s databazi
-	QString foodDBName;
-	foodDBName = "data.xml";
+	//nastaveni velikosti okna
+	int x, y, width, height;
+	config.GetWindowGeometry(x, y, width, height);
+	setGeometry(x, y, width, height);
 
 	//nacteni dat
 	foodInfo = new DataModel;
-	foodInfo->loadFoodFromFile(foodDBName);
+	foodInfo->LoadFoodFromFile(config.GetDBFileName());
 
-	for (int i = 0; i < foodInfo->getFoodAmount(); i++) {
-		foodList->insertItem(i, foodInfo->getFoodNameAtIndex(i));
+	for (int i = 0; i < foodInfo->GetFoodAmount(); i++) {
+		foodList->insertItem(i, foodInfo->GetFoodNameAtIndex(i));
 	}
 
 	//vygenerovani nahodneho cisla
+	//FIXME srand nechat v konstruktoru, samotne generovani cisla dat do samotne metody
 	srand((unsigned)time(0));
-	int randomNumber = rand() % (foodInfo->getFoodAmount());
+	int randomNumber = rand() % (foodInfo->GetFoodAmount());
 	qDebug() << randomNumber;
 
 	//zobrazeni informaci o nahodne vybranem jidle
@@ -41,6 +43,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
  * Destruktor
  */
 MainWindow::~MainWindow() {
+	QRect tmp = geometry();
+	config.SetWindowGeometry(tmp.x(), tmp.y(), tmp.width(), tmp.height());
+	config.SaveConfiguration();
+
 	delete foodList;
 	delete foodDetail;
 	delete quitAction;
@@ -59,12 +65,12 @@ MainWindow::~MainWindow() {
 void MainWindow::CreateActions() {
 	quitAction = new QAction(tr("&Quit"), this);
 	quitAction->setShortcut(tr("CTRL+Q"));
-	connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
+	connect(quitAction, SIGNAL(triggered()), this, SLOT(Quit()));
 
 }
 
 /*
- * vytvoreni widgetu pro zobrazovani informaci
+ * soukroma metoda pro vytvoreni widgetu pro zobrazovani informaci
  * vytvoreni nabidky File
  * FIXME vytvorit listu s tlacitkama
  */
@@ -108,11 +114,11 @@ void MainWindow::CreateLayout() {
  */
 void MainWindow::DisplayInfoAtIndex (int index) {
 	QString stringToDisplay;
-	stringToDisplay = foodInfo->getFoodNameAtIndex(index);
+	stringToDisplay = foodInfo->GetFoodNameAtIndex(index);
 	stringToDisplay += "\n\n";
-	stringToDisplay += "Ingredients:\n" + foodInfo->getFoodIngredientsAtIndex(index);
+	stringToDisplay += "Ingredients:\n" + foodInfo->GetFoodIngredientsAtIndex(index);
 	stringToDisplay += "\n\n";
-	stringToDisplay += "Preparation:\n" + foodInfo->getFoodPreparationAtIndex(index);
+	stringToDisplay += "Preparation:\n" + foodInfo->GetFoodPreparationAtIndex(index);
 	displayedFoodInfo->setPlainText(stringToDisplay);
 	foodDetail->setDocument(displayedFoodInfo);
 }
@@ -121,7 +127,7 @@ void MainWindow::DisplayInfoAtIndex (int index) {
  * soukromy slot
  * ukonceni aplikace
  */
-void MainWindow::quit() {
+void MainWindow::Quit() {
 	qApp->quit();
 }
 
@@ -135,7 +141,7 @@ void MainWindow::ItemSelected(QListWidgetItem *item) {
 	selectedItem = item->text();
 
 	int selectedItemIndex;
-	selectedItemIndex = foodInfo->indexOf(selectedItem);
+	selectedItemIndex = foodInfo->IndexOf(selectedItem);
 
 	DisplayInfoAtIndex(selectedItemIndex);
 }

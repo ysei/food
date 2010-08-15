@@ -10,5 +10,5 @@ build:
 	cd src && $(QMAKE) -project -o $(TARGET).PRO && $(QMAKE)
 	make -C src
 
-run:
+run: build
 	src/$(TARGET)

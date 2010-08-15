@@ -2,6 +2,9 @@
 #define __DATAMODEL_H__
 
 #include <QStringList>
+#include <QDebug>
+#include <QXmlStreamReader>
+#include <QFile>
 #include <QString>
 
 enum INFO {
@@ -15,13 +18,13 @@ enum INFO {
 
 class DataModel {
 public:
-	bool loadFoodFromFile(QString fileName);
-	int getFoodAmount();
-	QString getFoodNameAtIndex (int pos);
-	QString getFoodTypeAtIndex (int pos);
-	QString getFoodIngredientsAtIndex (int pos);
-	QString getFoodPreparationAtIndex (int pos);
-	int indexOf (QString name);
+	bool LoadFoodFromFile(QString fileName);
+	int GetFoodAmount();
+	QString GetFoodNameAtIndex (int pos);
+	QString GetFoodTypeAtIndex (int pos);
+	QString GetFoodIngredientsAtIndex (int pos);
+	QString GetFoodPreparationAtIndex (int pos);
+	int IndexOf (QString name);
 
 private:
 	QStringList food[4];

@@ -11,11 +11,13 @@
 #include <QMenuBar>
 #include <QAction>
 #include <QApplication>
+#include <QRect>
 
 #include <cstdlib> 
 #include <ctime> 
 
 #include "datamodel.h"
+#include "config.h"
 
 class QListWidget;
 
@@ -36,6 +38,8 @@ private:
 	DataModel *foodInfo;
 	QTextDocument *displayedFoodInfo;
 
+	Configuration config;
+
 	void CreateActions();
 	void CreateLayout();
 	void DisplayInfoAtIndex(int index);
@@ -43,7 +47,7 @@ private:
 	QAction *quitAction;
 
 private slots:
-	void quit(void);
+	void Quit();
 	void ItemSelected(QListWidgetItem *item);
 	
 };
