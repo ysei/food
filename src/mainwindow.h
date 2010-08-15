@@ -1,6 +1,8 @@
 #ifndef __MAINWINDOW_H__
 #define __MAINWINDOW_H_
 
+
+//FIXME seradit podle abecedy
 #include <QMainWindow>
 #include <QListWidget>
 #include <QString>
@@ -12,6 +14,10 @@
 #include <QAction>
 #include <QApplication>
 #include <QRect>
+#include <QMessageBox>
+#include <QIcon>
+#include <QPixmap>
+#include <QStatusBar>
 
 #include <cstdlib> 
 #include <ctime> 
@@ -37,19 +43,27 @@ private:
 	QGroupBox *horizontalGroupBox;
 	DataModel *foodInfo;
 	QTextDocument *displayedFoodInfo;
+	QToolBar *toolBar;
 
 	Configuration config;
 
 	void CreateActions();
 	void CreateLayout();
 	void DisplayInfoAtIndex(int index);
+	int GenerateRandomNumber();
 	
 	QAction *quitAction;
+	QAction *addFoodAction;
+	QAction *removeFoodAction;
+	QAction *chooseRandomFoodAction;
 
 private slots:
 	void Quit();
 	void ItemSelected(QListWidgetItem *item);
-	
+	void AddFood();
+	void RemoveFood();
+	void ChooseRandomFood();
 };
+
 
 #endif

@@ -19,7 +19,6 @@ bool Configuration::LoadConfiguration() {
 		if (token == QXmlStreamReader::StartElement) {
 			QString elementName = xml.name().toString();
 			token = xml.readNext();
-			qDebug() << elementName;
 			if (elementName == "windowGeometry") {
 				QString readValue = xml.text().toString();
 				if (!readValue.isEmpty()) {
@@ -37,8 +36,6 @@ bool Configuration::LoadConfiguration() {
 		}
 	} while (!(xml.atEnd()));
 
-	qDebug() << x << y << width << height;
-	qDebug() << DBFileName;
 
 	file.close();
 	return true;

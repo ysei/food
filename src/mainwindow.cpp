@@ -20,17 +20,28 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	//nacteni dat
 	foodInfo = new DataModel;
-	foodInfo->LoadFoodFromFile(config.GetDBFileName());
+	if (foodInfo->LoadFoodFromFile(config.GetDBFileName()) != true) {
+		QMessageBox msgBox;
+		msgBox.setText("Unable to open DB file");
+		msgBox.setInformativeText("Do you want to create new DB file?");
+		msgBox.setStandardButtons(QMessageBox::No | QMessageBox::Yes);
+		msgBox.setDefaultButton(QMessageBox::Yes);
+		int ret = msgBox.exec();
+		if (ret == QMessageBox::No) {
+			exit(0);
+		}
+		//FIXME tohle zrusit a pokracovat s prazdnym souborem
+		exit(0);
+	}
 
 	for (int i = 0; i < foodInfo->GetFoodAmount(); i++) {
 		foodList->insertItem(i, foodInfo->GetFoodNameAtIndex(i));
 	}
 
-	//vygenerovani nahodneho cisla
-	//FIXME srand nechat v konstruktoru, samotne generovani cisla dat do samotne metody
+	//nastaveni generatoru pseudonahodnych cisel
 	srand((unsigned)time(0));
-	int randomNumber = rand() % (foodInfo->GetFoodAmount());
-	qDebug() << randomNumber;
+
+	int randomNumber = GenerateRandomNumber();
 
 	//zobrazeni informaci o nahodne vybranem jidle
 	displayedFoodInfo = new QTextDocument;
@@ -38,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	foodList->setCurrentItem(foodList->item(randomNumber));
 	
 }
+
 
 /*
  * Destruktor
@@ -50,8 +62,12 @@ MainWindow::~MainWindow() {
 	delete foodList;
 	delete foodDetail;
 	delete quitAction;
+	delete addFoodAction;
+	delete removeFoodAction;
+	delete chooseRandomFoodAction;
 	delete fileMenu;
 	delete menuBar;
+	//delete toolBar;
 	delete boxLayout;
 	delete horizontalGroupBox;
 	delete foodInfo;
@@ -67,6 +83,26 @@ void MainWindow::CreateActions() {
 	quitAction->setShortcut(tr("CTRL+Q"));
 	connect(quitAction, SIGNAL(triggered()), this, SLOT(Quit()));
 
+	addFoodAction = new QAction(tr("Add food"), this);
+	//FIXME popremyslet nad tou zkratkou - nechat/najit lepsi
+	addFoodAction->setShortcut(tr("CTRL+N"));
+	addFoodAction->setIcon(QIcon(QPixmap(":img/add.png")));
+	addFoodAction->setStatusTip(tr("Add new food"));
+	connect(addFoodAction, SIGNAL(triggered()), this, SLOT(AddFood()));
+
+	removeFoodAction = new QAction(tr("Remove food"), this);
+	//FIXME popremyslet nad tou zkratkou - zrusit/najit lepsi
+	//removeFoodAction->setShortcut(tr("CTRL+R"));
+	removeFoodAction->setIcon(QIcon(QPixmap(":img/remove.png")));
+	removeFoodAction->setStatusTip(tr("Remove currently selected food"));
+	connect(removeFoodAction, SIGNAL(triggered()), this, SLOT(RemoveFood()));
+
+	chooseRandomFoodAction = new QAction(tr("Choose random food"), this);
+	//FIXME popremyslet nad tou zkratkou - najit lepsi
+	//chooseRandomFoodAction->setShortCut(tr("SPACE"));
+	chooseRandomFoodAction->setIcon(QIcon(QPixmap(":img/dice.png")));
+	chooseRandomFoodAction->setStatusTip(tr("Choose random food"));
+	connect(chooseRandomFoodAction, SIGNAL(triggered()), this, SLOT(ChooseRandomFood()));
 }
 
 /*
@@ -75,7 +111,6 @@ void MainWindow::CreateActions() {
  * FIXME vytvorit listu s tlacitkama
  */
 void MainWindow::CreateLayout() {
-	qDebug() << "vytvarim layout";
 	
 	//widget pro zobrazeni nazvu jidel
 	foodList = new QListWidget;
@@ -98,8 +133,18 @@ void MainWindow::CreateLayout() {
 	menuBar = new QMenuBar(this);
 	fileMenu = new QMenu;
 	fileMenu = menuBar->addMenu(tr("&File"));
+	fileMenu->addAction(addFoodAction);
+	fileMenu->addAction(chooseRandomFoodAction);
+	fileMenu->addAction(removeFoodAction);
 	fileMenu->addAction(quitAction);
 
+
+	//FIXME nefunguje, spravit
+/*	toolBar = new QToolBar(this);
+	addToolBar(toolBar);
+	toolBar->addAction(addFoodAction);
+	toolBar->addAction(chooseRandomFoodAction);
+	toolBar->addAction(removeFoodAction);*/
 
 	setMenuBar(menuBar);
 	setCentralWidget(horizontalGroupBox);
@@ -122,6 +167,17 @@ void MainWindow::DisplayInfoAtIndex (int index) {
 	displayedFoodInfo->setPlainText(stringToDisplay);
 	foodDetail->setDocument(displayedFoodInfo);
 }
+
+
+/*
+ * soukroma metoda
+ * vygeneruje nahodne cislo
+ */
+int MainWindow::GenerateRandomNumber() {
+	int randomNumber = rand() % (foodInfo->GetFoodAmount());
+	return randomNumber;
+}
+
 
 /*
  * soukromy slot
@@ -146,3 +202,38 @@ void MainWindow::ItemSelected(QListWidgetItem *item) {
 	DisplayInfoAtIndex(selectedItemIndex);
 }
 
+
+/*
+ * soukromy slot
+ * prida nove jidlo do seznamu jidel
+ */
+void MainWindow::AddFood() {
+	//FIXME udelat dialog, ve kterem bude nazev jidla, ingredience, typ a postup pripravy
+	QMessageBox msgBox;
+	msgBox.setText("zde bude dialogove okno pro pridani noveho jidla");
+	msgBox.exec();
+}
+
+/*
+ * soukromy slot
+ * odstrani jidlo ze seznamu jidel
+ */
+void MainWindow::RemoveFood() {
+	//FIXME odebirat momentalne oznacene jidlo
+	//zeptat se, jestli se ma jidlo opravdu odebrat
+	//pripadne prekreslit zobrazene informace
+	QMessageBox msgBox;
+	msgBox.setText("momentalne oznacene jidlo se odebere");
+	msgBox.exec();
+}
+
+/*
+ * soukromy slot
+ * vybere nahodne jidlo
+ */
+void MainWindow::ChooseRandomFood() {
+	//FIXME oznaci nahodne jidlo
+	QMessageBox msgBox;
+	msgBox.setText("bude oznaceno nahodne vybrane jidlo cislo: " + QString::number(GenerateRandomNumber()));
+	msgBox.exec();
+}
