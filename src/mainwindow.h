@@ -18,14 +18,15 @@
 #include <QIcon>
 #include <QPixmap>
 #include <QStatusBar>
+#include <QToolBar>
+#include <QDialog>
 
 #include <cstdlib> 
 #include <ctime> 
 
 #include "datamodel.h"
 #include "config.h"
-
-class QListWidget;
+#include "dialog.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
@@ -44,11 +45,13 @@ private:
 	DataModel *foodInfo;
 	QTextDocument *displayedFoodInfo;
 	QToolBar *toolBar;
+	QStatusBar *statusBar;
 
 	Configuration config;
 
 	void CreateActions();
 	void CreateLayout();
+	void CreateToolBar();
 	void DisplayInfoAtIndex(int index);
 	int GenerateRandomNumber();
 	

@@ -1,6 +1,7 @@
 
 
 #include "datamodel.h"
+#include "enum.h"
 
 
 /*
