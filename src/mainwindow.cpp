@@ -147,7 +147,7 @@ void MainWindow::CreateLayout() {
 	setCentralWidget(horizontalGroupBox);
 
 	//oznaceni nazvu jidla -> zobrazeni informaci o tomto jidle
-	connect(foodList, SIGNAL(itemActivated(QListWidgetItem *)), this, SLOT(ItemSelected(QListWidgetItem *)));
+	connect(foodList, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(ItemSelected(QListWidgetItem *)));
 }
 
 /*
@@ -215,23 +215,14 @@ void MainWindow::ItemSelected(QListWidgetItem *item) {
  * prida nove jidlo do seznamu jidel
  */
 void MainWindow::AddFood() {
-	//FIXME udelat dialog, ve kterem bude nazev jidla, ingredience, typ a postup pripravy
-	/*QMessageBox msgBox;
-	msgBox.setText("zde bude dialogove okno pro pridani noveho jidla");
-	msgBox.exec();*/
 	QStringList newFoodInformation;
 	Dialog dialog;
 	int result;
 	result = dialog.exec();
 	if (result == 1) {
-		qDebug() << "stisknuto OK";
 		newFoodInformation = dialog.GetNewFoodInformation();
-		qDebug() << newFoodInformation;
 		foodInfo->addNewFood(newFoodInformation);
 		foodList->addItem(newFoodInformation[NAME]);
-	}
-	if (result == 0) {
-		qDebug() << "stisknuto Cancel";
 	}
 }
 
