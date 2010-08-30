@@ -27,6 +27,7 @@
 #include "datamodel.h"
 #include "config.h"
 #include "dialog.h"
+#include "enum.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT

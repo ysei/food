@@ -227,6 +227,8 @@ void MainWindow::AddFood() {
 		qDebug() << "stisknuto OK";
 		newFoodInformation = dialog.GetNewFoodInformation();
 		qDebug() << newFoodInformation;
+		foodInfo->addNewFood(newFoodInformation);
+		foodList->addItem(newFoodInformation[NAME]);
 	}
 	if (result == 0) {
 		qDebug() << "stisknuto Cancel";

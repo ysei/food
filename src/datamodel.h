@@ -18,6 +18,7 @@ public:
 	QString GetFoodIngredientsAtIndex (int pos);
 	QString GetFoodPreparationAtIndex (int pos);
 	int IndexOf (QString name);
+	void addNewFood(QStringList newFood);
 
 private:
 	QStringList food[4];

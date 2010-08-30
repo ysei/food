@@ -91,3 +91,14 @@ QString DataModel::GetFoodPreparationAtIndex (int index) {
 int DataModel::IndexOf (QString name) {
 	return food[NAME].indexOf(name);
 }
+
+/*
+ * verejna metoda pro pridani noveho jidla
+ */
+void DataModel::addNewFood (QStringList newFood) {
+	food[NAME].append(newFood[NAME]);
+	food[TYPE].append(newFood[TYPE]);
+	food[INGREDIENTS].append(newFood[INGREDIENTS]);
+	food[PREPARATION].append(newFood[PREPARATION]);
+	qDebug() << "pridavam nove jidlo";
+}
