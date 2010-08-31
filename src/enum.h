@@ -11,5 +11,4 @@ enum INFO {
 	infoLast = 3
 };
 
-
 #endif

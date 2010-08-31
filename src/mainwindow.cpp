@@ -61,6 +61,8 @@ MainWindow::~MainWindow() {
 	config.SetWindowGeometry(tmp.x(), tmp.y(), tmp.width(), tmp.height());
 	config.SaveConfiguration();
 
+	foodInfo->SaveFoodIntoFile(config.GetDBFileName());
+
 	delete foodList;
 	delete foodDetail;
 	delete quitAction;
@@ -146,8 +148,8 @@ void MainWindow::CreateLayout() {
 	setMenuBar(menuBar);
 	setCentralWidget(horizontalGroupBox);
 
-	//oznaceni nazvu jidla -> zobrazeni informaci o tomto jidle
-	connect(foodList, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(ItemSelected(QListWidgetItem *)));
+	//zobrazeni informace o nove oznacenem jidle
+	connect(foodList, SIGNAL(itemSelectionChanged()), this, SLOT(AnotherFoodSelected()));
 }
 
 /*
@@ -195,13 +197,14 @@ void MainWindow::Quit() {
 }
 
 
+
 /*
  * soukromy slot
- * zjisti ktere jidlo bylo oznaceno a zobrazi o nem informace
+ * pri oznaceni jineho jidla zobrazuje informaci o tomto jidle
  */
-void MainWindow::ItemSelected(QListWidgetItem *item) {
+void MainWindow::AnotherFoodSelected() {
 	QString selectedItem;
-	selectedItem = item->text();
+	selectedItem = foodList->currentItem()->text();
 
 	int selectedItemIndex;
 	selectedItemIndex = foodInfo->IndexOf(selectedItem);
@@ -212,31 +215,49 @@ void MainWindow::ItemSelected(QListWidgetItem *item) {
 
 /*
  * soukromy slot
- * prida nove jidlo do seznamu jidel
+ * prida nove jidlo do seznamu jidel pomoci dialogoveho okna
  */
 void MainWindow::AddFood() {
 	QStringList newFoodInformation;
 	Dialog dialog;
 	int result;
+
 	result = dialog.exec();
-	if (result == 1) {
+	if (result == QDialog::Accepted) {
 		newFoodInformation = dialog.GetNewFoodInformation();
-		foodInfo->addNewFood(newFoodInformation);
+		foodInfo->AddNewFood(newFoodInformation);
 		foodList->addItem(newFoodInformation[NAME]);
 	}
 }
 
 /*
  * soukromy slot
- * odstrani jidlo ze seznamu jidel
+ * zepta se, jestli se ma jidlo odstranit
+ * pokud uzivatel klikne na "ok", odstrani se jidlo ze seznamu jidel
  */
 void MainWindow::RemoveFood() {
-	//FIXME odebirat momentalne oznacene jidlo
-	//zeptat se, jestli se ma jidlo opravdu odebrat
-	//pripadne prekreslit zobrazene informace
+	QListWidgetItem *item;
+	item = foodList->currentItem();
+
+	QString itemName;
+	itemName = item->text();
+
 	QMessageBox msgBox;
-	msgBox.setText("momentalne oznacene jidlo se odebere");
-	msgBox.exec();
+	msgBox.setIcon(QMessageBox::Question);
+	msgBox.setWindowTitle("Removing " + itemName);
+	msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+	msgBox.setText("Do you really want to remove food " + itemName + "?");
+
+	int result;
+	result = msgBox.exec();
+	if (result == QMessageBox::Ok) {
+		foodInfo->RemoveFood(itemName);
+
+		int indexOfRemovedItem;
+		indexOfRemovedItem = foodList->row(item);
+		foodList->removeItemWidget(item);
+		foodList->takeItem(indexOfRemovedItem);
+	}
 }
 
 /*
@@ -248,5 +269,4 @@ void MainWindow::ChooseRandomFood() {
 	QListWidgetItem *item;
 	item = foodList->item(randomNumber);
 	foodList->setCurrentItem(item);
-	ItemSelected(item);
 }

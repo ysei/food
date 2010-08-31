@@ -50,6 +50,51 @@ bool DataModel::LoadFoodFromFile(QString fileName) {
 	return true;
 }
 
+
+/*
+ * verejna metoda
+ * ulozi jidla do xml souboru
+ */
+bool DataModel::SaveFoodIntoFile (QString fileName) {
+	QFile file(fileName);
+
+	if (!file.open(QIODevice::WriteOnly)) {
+		return false;
+	}
+	
+	QXmlStreamWriter stream(&file);
+	stream.setAutoFormatting(true);
+	stream.writeStartDocument();
+	stream.writeStartElement("root");
+	for (int i = 0; i < this->GetFoodAmount(); i++) {
+		stream.writeStartElement("item");
+
+		stream.writeStartElement("name");
+		stream.writeCharacters(food[NAME][i]);
+		stream.writeEndElement();
+
+		stream.writeStartElement("type");
+		stream.writeCharacters(food[TYPE][i]);
+		stream.writeEndElement();
+
+		stream.writeStartElement("ingredients");
+		stream.writeCharacters(food[INGREDIENTS][i]);
+		stream.writeEndElement();
+
+		stream.writeStartElement("preparation");
+		stream.writeCharacters(food[PREPARATION][i]);
+		stream.writeEndElement();
+
+		stream.writeEndElement();
+	}
+	stream.writeEndElement();
+	stream.writeEndDocument();
+
+	file.close();
+	qDebug() << "zkurvene statnice";
+	return true;
+}
+
 /*
  * vrati pocet nactenych jidel
  */
@@ -95,10 +140,23 @@ int DataModel::IndexOf (QString name) {
 /*
  * verejna metoda pro pridani noveho jidla
  */
-void DataModel::addNewFood (QStringList newFood) {
+void DataModel::AddNewFood (QStringList newFood) {
 	food[NAME].append(newFood[NAME]);
 	food[TYPE].append(newFood[TYPE]);
 	food[INGREDIENTS].append(newFood[INGREDIENTS]);
 	food[PREPARATION].append(newFood[PREPARATION]);
 	qDebug() << "pridavam nove jidlo";
 }
+
+/*
+ * verejna metoda pro odebrani jidla
+ */
+void DataModel::RemoveFood (QString name) {
+	int index;
+	index = food[NAME].indexOf(name);
+	food[NAME].removeAt(index);
+	food[TYPE].removeAt(index);
+	food[INGREDIENTS].removeAt(index);
+	food[PREPARATION].removeAt(index);
+}
+

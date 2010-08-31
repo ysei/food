@@ -63,7 +63,7 @@ private:
 
 private slots:
 	void Quit();
-	void ItemSelected(QListWidgetItem *item);
+	void AnotherFoodSelected();
 	void AddFood();
 	void RemoveFood();
 	void ChooseRandomFood();
