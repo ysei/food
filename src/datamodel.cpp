@@ -91,7 +91,6 @@ bool DataModel::SaveFoodIntoFile (QString fileName) {
 	stream.writeEndDocument();
 
 	file.close();
-	qDebug() << "zkurvene statnice";
 	return true;
 }
 
