@@ -1,15 +1,17 @@
 #include "config.h"
 
-Configuration::Configuration() : configurationFileName("config.xml"), x(0), y(0), width(400), height(300) {
+Configuration::Configuration() : x(0), y(0), width(400), height(300) {
 }
 
-bool Configuration::LoadConfiguration() {
-	QFile file(configurationFileName);
+bool Configuration::LoadConfiguration(QString fileName) {
+	QFile file(fileName);
 
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		return false;
 	}
-
+	
+	//prirazovat hodnotu do teto promenne pouze pokud se podari soubor otevrit
+	configurationFileName = fileName;
 	
 	QXmlStreamReader xml(&file);
 	QXmlStreamReader::TokenType token;

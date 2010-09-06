@@ -47,6 +47,28 @@ bool DataModel::LoadFoodFromFile(QString fileName) {
 	}
 */
 	file.close();
+
+	int namesAmount;
+	int typesAmount;
+	int ingredientsAmount;
+	int preparationAmount;
+	namesAmount = food[NAME].count();
+	typesAmount = food[TYPE].count();
+	ingredientsAmount = food[INGREDIENTS].count();
+	preparationAmount = food[PREPARATION].count();
+
+
+	//jednoducha kontrola, jestli nechybi nejaka polozka, vseho musi byt nacteno stejne
+	//pokud se v teto fazi zjisti chyba, je potreba vsecky dosud ulozene informace zahodit
+	//FIXME neresi urcite pripady, zamysli se nad tim, zda-li ma cenu detekovat slozitejsi chyby
+	if ((namesAmount != typesAmount) || (namesAmount != ingredientsAmount) || (namesAmount != preparationAmount)) {
+		food[NAME].erase(food[NAME].begin(), food[NAME].end());
+		food[TYPE].erase(food[TYPE].begin(), food[TYPE].end());
+		food[INGREDIENTS].erase(food[INGREDIENTS].begin(), food[INGREDIENTS].end());
+		food[PREPARATION].erase(food[PREPARATION].begin(), food[PREPARATION].end());
+		return false;
+	}
+
 	return true;
 }
 
@@ -66,6 +88,7 @@ bool DataModel::SaveFoodIntoFile (QString fileName) {
 	stream.setAutoFormatting(true);
 	stream.writeStartDocument();
 	stream.writeStartElement("root");
+
 	for (int i = 0; i < this->GetFoodAmount(); i++) {
 		stream.writeStartElement("item");
 
@@ -85,8 +108,11 @@ bool DataModel::SaveFoodIntoFile (QString fileName) {
 		stream.writeCharacters(food[PREPARATION][i]);
 		stream.writeEndElement();
 
+		//</item>
 		stream.writeEndElement();
 	}
+
+	//</root>
 	stream.writeEndElement();
 	stream.writeEndDocument();
 
@@ -144,7 +170,6 @@ void DataModel::AddNewFood (QStringList newFood) {
 	food[TYPE].append(newFood[TYPE]);
 	food[INGREDIENTS].append(newFood[INGREDIENTS]);
 	food[PREPARATION].append(newFood[PREPARATION]);
-	qDebug() << "pridavam nove jidlo";
 }
 
 /*
@@ -159,3 +184,24 @@ void DataModel::RemoveFood (QString name) {
 	food[PREPARATION].removeAt(index);
 }
 
+
+/*
+ * verejna metoda pro zmenu informaci o jidle
+ */
+void DataModel::EditFoodAtIndex (QStringList newFood, int index) {
+	food[NAME][index] = newFood[NAME];
+	food[TYPE][index] = newFood[TYPE];
+	food[INGREDIENTS][index] = newFood[INGREDIENTS];
+	food[PREPARATION][index] = newFood[PREPARATION];
+	
+}
+
+/*
+ * verejna metoda pro zjisteni vsech typu jidla
+ */
+QStringList DataModel::GetFoodTypes() {
+	QStringList foodTypes;
+	foodTypes = food[TYPE];
+	foodTypes.removeDuplicates();
+	return foodTypes;
+}

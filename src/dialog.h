@@ -16,9 +16,9 @@ class Dialog : public QDialog {
 	Q_OBJECT
 
 	public:
-		Dialog();
+		Dialog(QStringList types, QStringList *currentFoodInformation = 0);
 		~Dialog();
-		QStringList GetNewFoodInformation();
+		QStringList GetFoodInformation();
 
 	private:
 		QVBoxLayout *mainLayout;
@@ -29,9 +29,11 @@ class Dialog : public QDialog {
 		QLineEdit *foodIngredients;
 		QTextEdit *foodPreparation;
 		QDialogButtonBox *buttonBox;
-		QStringList newFoodInformation;
+		QStringList foodInformation;
+		QStringList foodTypes;
 
 		void CreateLayout();
+	//	void InitializeLayout();
 
 	private slots:
 		void FoodNameInserted();

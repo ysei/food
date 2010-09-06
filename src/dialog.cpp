@@ -9,15 +9,24 @@
  * nastavi implicitni hodnoty pro pridavani noveho jidla
  * vytvori layout dialogoveho okna
  */
-Dialog::Dialog() {
-	for (int i = infoFirst; i <= infoLast; i++) {
-		newFoodInformation.append(QString(""));
+Dialog::Dialog(QStringList types, QStringList *currentFoodInformation) {
+	foodTypes = types;
+
+
+	//pripadne nastaveni hodnot pokud byl predan parametr currentFoodInformation
+	if (currentFoodInformation != 0) {
+		foodInformation = *currentFoodInformation;
+	}
+	else {
+		for (int i = infoFirst; i <= infoLast; i++) {
+			foodInformation.append(QString(""));
+		}
+		foodInformation[TYPE] = "meat";
 	}
 
-	//nastaveni implicitnich hodnot
-	newFoodInformation[TYPE] = "meat";
 
 	CreateLayout();
+	//InitializeLayout();
 
 	setWindowTitle(tr("Add new food"));
 
@@ -47,7 +56,7 @@ Dialog::~Dialog() {
 
 
 /*
- * vytvori layout
+ * vytvori layout a do jednotlivych policek nastavi hodnoty
  * zakladem je QVBoxLayout - do nej je pridan QGroupBox a QDialogButtonBox
  * QGroupBox je tvoren jednom QFormLayoutem
  * v QFormLayoutu jsou poporade QLineEdit QComboBox, QLineEdit a QTextEdit
@@ -63,7 +72,9 @@ void Dialog::CreateLayout() {
 	
 	buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-	foodType->addItem(QString("meat"));
+	for (int i = 0; i < foodTypes.count(); i++) {
+		foodType->addItem(foodTypes[i]);
+	}
 
 	formLayout->addRow(new QLabel(tr("Name:")), foodName);
 	formLayout->addRow(new QLabel(tr("Type:")), foodType);
@@ -76,14 +87,31 @@ void Dialog::CreateLayout() {
 	mainLayout->addWidget(buttonBox);
 
 	setLayout(mainLayout);
+
+	//nastaveni hodnot
+	foodName->setText(foodInformation[NAME]);
+	int indexOfCurrentType;
+	indexOfCurrentType = foodType->findText(foodInformation[TYPE]);
+	foodType->setCurrentIndex(indexOfCurrentType);
+	foodIngredients->setText(foodInformation[INGREDIENTS]);
+	foodPreparation->setText(foodInformation[PREPARATION]);
 }
+
+
+/*
+ * soukroma metoda
+ * inicializuje hodnoty v jednotlivych "prihradkach" v layoutu
+ */
+/*void Dialog::InitializeLayout() {
+	
+}*/
 
 /*
  * verejna metoda
  * vrati hodnoty zjistene z dialogoveho okna
  */
-QStringList Dialog::GetNewFoodInformation() {
-	return newFoodInformation;
+QStringList Dialog::GetFoodInformation() {
+	return foodInformation;
 }
 
 
@@ -92,7 +120,7 @@ QStringList Dialog::GetNewFoodInformation() {
  * detekuje zmenu v poli foodname
  */
 void Dialog::FoodNameInserted() {
-	newFoodInformation[NAME] = foodName->displayText();
+	foodInformation[NAME] = foodName->displayText();
 }
 
 
@@ -101,13 +129,13 @@ void Dialog::FoodNameInserted() {
  * detekuje zmenu v poli foodname
  */
 void Dialog::FoodTypeInserted(const QString &text) {	
-	newFoodInformation[TYPE] = text;
+	foodInformation[TYPE] = text;
 }
 
 void Dialog::FoodIngredientsInserted() {
-	newFoodInformation[INGREDIENTS] = foodIngredients->displayText();
+	foodInformation[INGREDIENTS] = foodIngredients->displayText();
 }
 
 void Dialog::FoodPreparationInserted() {
-	newFoodInformation[PREPARATION] = foodPreparation->toPlainText();
+	foodInformation[PREPARATION] = foodPreparation->toPlainText();
 }

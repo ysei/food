@@ -20,6 +20,7 @@
 #include <QStatusBar>
 #include <QToolBar>
 #include <QDialog>
+#include <QFileDialog>
 
 #include <cstdlib> 
 #include <ctime> 
@@ -60,6 +61,7 @@ private:
 	QAction *addFoodAction;
 	QAction *removeFoodAction;
 	QAction *chooseRandomFoodAction;
+	QAction *editFoodAction;
 
 private slots:
 	void Quit();
@@ -67,6 +69,7 @@ private slots:
 	void AddFood();
 	void RemoveFood();
 	void ChooseRandomFood();
+	void EditFood();
 };
 
 

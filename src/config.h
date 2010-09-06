@@ -14,7 +14,7 @@ class Configuration {
 	public:
 		Configuration();
 		QString GetDBFileName();
-		bool LoadConfiguration();
+		bool LoadConfiguration(QString fileName);
 		bool SaveConfiguration();
 		void GetWindowGeometry(int &_x, int &_y, int &_width, int &_height);
 		void SetWindowGeometry(int _x, int _y, int _width, int _height);
